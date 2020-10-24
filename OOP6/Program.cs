@@ -15,71 +15,84 @@ namespace OOP6
         {
             //получение название файла
             dwr("Введите имя файла данных: ");
-            path = drl();
-            while (true)
+            if ((path = drl()) != "")
             {
-                dwr("Для записи введите W, для чтения R");
-                string s = drl();
-                //если пользователь выбрал запись файла
-                if (s.ToUpper() == "W")
+                while (true)
                 {
-                    dwr("Введите количество работников: ");
-                    int n;
-                    //если пользователь ввел верное количество элементов
-                    if (int.TryParse(drl(), out n))
+                    dwr("Для записи введите W, для чтения R");
+                    string s = drl();
+                    //если пользователь выбрал запись файла
+                    if (s.ToUpper() == "W")
                     {
-                        StreamWriter sw = new StreamWriter(path);
-                        //создание массива объектов класса сотрудник
-                        Person[] p = new Person[n];
-                        //заполнение массива сотрудников и запись в файл
-                        for (int i = 0; i < n; i++)
+                        dwr("Введите количество работников: ");
+                        int n;
+                        //если пользователь ввел верное количество элементов
+                        if (int.TryParse(drl(), out n))
                         {
-                            p[i] = new Person();
-                            dwr($"Введите имя сотрудника {i}");
-                            p[i].name = drl();
-                            dwr($"Введите год рождения сотрудника {i}");
-                            int.TryParse(drl(), out p[i].birth);
-                            dwr($"Введите стаж работы сотрудника {i}");
-                            int.TryParse(drl(), out p[i].exp);
-                            dwr($"Введите должность сотрудника {i}");
-                            p[i].job = drl();
-                            dwr($"Введите оклад сотрудника {i}");
-                            int.TryParse(drl(), out p[i].salary);
-                            sw.WriteLine($"{p[i].name} {p[i].birth} {p[i].exp} {p[i].job} {p[i].salary}");
+                            StreamWriter sw = new StreamWriter(path);
+                            //создание массива объектов класса сотрудник
+                            Person[] p = new Person[n];
+                            //заполнение массива сотрудников и запись в файл
+                            for (int i = 0; i < n; i++)
+                            {
+                                p[i] = new Person();
+                                dwr($"Введите имя сотрудника {i}");
+                                p[i].name = drl();
+                                dwr($"Введите год рождения сотрудника {i}");
+                                int.TryParse(drl(), out p[i].birth);
+                                dwr($"Введите стаж работы сотрудника {i}");
+                                int.TryParse(drl(), out p[i].exp);
+                                dwr($"Введите должность сотрудника {i}");
+                                p[i].job = drl();
+                                dwr($"Введите оклад сотрудника {i}");
+                                int.TryParse(drl(), out p[i].salary);
+                                sw.WriteLine($"{p[i].name} {p[i].birth} {p[i].exp} {p[i].job} {p[i].salary}");
+                            }
+                            sw.Close();
+                            break;
                         }
-                        sw.Close();
+                        else
+                        {
+                            dwr("Неправильный ввод");
+                        }
+                    }
+                    //если пользователь выбрал чтение из файла
+                    else if (s.ToUpper() == "R")
+                    {
+                        List<Person> p = reading();
+                        if (p.Count > 0)
+                        {
+                            //выполнение подзадач задания
+                            dwr("Выполнение 1 задачи");
+                            e1(p);
+                            dwr("Выполнение 2 задачи");
+                            e2(p);
+                            dwr("Выполнение 3 задачи");
+                            e3(p);
+                            dwr("Выполнение 4 задачи");
+                            e4(p);
+                            dwr("Выполнение 5 задачи");
+                            e5(p);
+                            dwr("Выполнение 6 задачи");
+                            e6(p);
+                            dwr("Выполнение 7 задачи");
+                            e7();
+                        }
+                        else
+                        {
+                            dwr("В файле нет данных");
+                        }
                         break;
                     }
                     else
                     {
-                        dwr("Неправильный ввод");
+                        dwr("Вы ничего не выбрали, повторите выбор");
                     }
                 }
-                //если пользователь выбрал чтение из файла
-                else if (s.ToUpper() == "R")
-                {
-                    List<Person> p = reading();
-                    //выполнение подзадач задания
-                    dwr("Выполнение 1 задачи");
-                    e1(p);
-                    dwr("Выполнение 2 задачи");
-                    e2(p);
-                    dwr("Выполнение 3 задачи");
-                    e3(p);
-                    dwr("Выполнение 4 задачи");
-                    e4(p);
-                    dwr("Выполнение 5 задачи");
-                    e5(p);
-                    dwr("Выполнение 6 задачи");
-                    e6(p);
-                    dwr("Выполнение 7 задачи");
-                    e7();
-                    break;
-                }
-                else
-                {
-                    dwr("Вы ничего не выбрали, повторите выбор");
-                }
+            }
+            else
+            {
+                dwr("Введено пустое имя файла");
             }
             //завершение программы
             csw.Close();
@@ -107,10 +120,6 @@ namespace OOP6
                     p[p.Count - 1].salary = int.Parse(sp[4]);
                 }
                 sr.Close();
-            }
-            else
-            {
-                dwr("Файл не существует");
             }
             return p;
         }
@@ -155,9 +164,11 @@ namespace OOP6
         /// </summary>
         static void e4(List<Person> p)
         {
+            dwr("Введите букву");
+            char w = drl()[0];
             for (int i = 0; i < p.Count; i++)
             {
-                if (p[i].name[0] == drl()[0])
+                if (p[i].name[0] == w)
                 {
                     dwr(p[i].name);
                 }
@@ -168,20 +179,21 @@ namespace OOP6
         /// </summary>
         static void e5(List<Person> p)
         {
-            for (int i = 0; i < p.Count; i++)
+            int num;
+            dwr("Введите зарплату");
+            if (int.TryParse(drl(), out num))
             {
-                int num;
-                if(int.TryParse(drl(),out num))
+                for (int i = 0; i < p.Count; i++)
                 {
-                    if(num < p[i].salary)
+                    if (num < p[i].salary)
                     {
                         dwr(p[i].name);
                     }
                 }
-                else
-                {
-                    dwr("Введено неверное значение");
-                }
+            }
+            else
+            {
+                dwr("Введено неверное значение");
             }
         }
         /// <summary>
