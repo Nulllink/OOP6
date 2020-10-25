@@ -205,10 +205,10 @@ namespace OOP6
             int ind;
             if(int.TryParse(drl(), out ind))
             {
-                if(ind < p.Count && ind > -1)
+                if(ind < p.Count && ind > 0)
                 {
                     dwr("Введите новую фамилию");
-                    p[ind].name = drl();
+                    p[ind-1].name = drl();
                     StreamWriter sw = new StreamWriter(path);
                     //запись в файл новых данных
                     for(int i = 0;i < p.Count; i++)
